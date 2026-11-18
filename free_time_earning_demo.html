@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FREE TIME EARNING</title>
+<style>
+:root{--blue:#0759c7;--dark:#12345a;--bg:#f2f6fc;--white:#fff;--muted:#66758a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,"Noto Sans Bengali",sans-serif;color:#17243b}
+.app{width:min(100%,480px);min-height:100vh;margin:auto;background:#fff;box-shadow:0 0 24px #1b376015;padding:18px 15px 30px}
+header{text-align:center;padding:18px 8px 22px;background:linear-gradient(135deg,#0759c7,#1687df);color:white;border-radius:18px;margin-bottom:17px}
+.logo{font-size:48px}header h1{font-size:22px;margin:7px 0 4px}header p{font-size:12px;margin:0;opacity:.9}
+h2{font-size:20px;margin:8px 0 15px;color:var(--dark)}h3{font-size:17px;margin:10px 0}
+button,.btn{border:0;border-radius:10px;padding:13px 12px;background:var(--blue);color:white;font-weight:700;font-size:15px;cursor:pointer;width:100%;text-align:center}
+button:active{transform:scale(.98)}.secondary{background:#e8f1ff;color:#0759c7;border:1px solid #cfe0fa}.danger{background:#e74b58}.success{background:#15945b}
+.stack{display:grid;gap:11px}.row{display:flex;gap:10px}.row>*{flex:1}
+label{display:block;font-size:14px;font-weight:700;margin:12px 0 6px}input{width:100%;padding:13px;border:1px solid #ccd7e5;border-radius:9px;font-size:15px;outline:none}input:focus{border-color:#1687df}
+.card{background:#f7faff;border:1px solid #e1eaf5;border-radius:13px;padding:14px;margin:12px 0}
+.back{margin:0 0 15px;background:#e8f1ff;color:#0759c7}
+.note{font-size:12px;color:var(--muted);line-height:1.6}.notice{padding:12px;border-radius:10px;background:#fff4d9;color:#785400;margin:12px 0;font-size:13px;line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.task{min-height:82px;background:#f0f6ff;color:#104b91;border:1px solid #d8e7fb;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;font-size:14px}
+.task span:first-child{font-size:24px}.balance{font-size:27px;color:#087b4c;font-weight:800}
+.hidden{display:none!important}.successText{color:#13844f;font-weight:700}.link{display:block;word-break:break-all;color:#0759c7;margin:12px 0}
+ul{padding-left:20px;line-height:1.9}.profileline{padding:10px 0;border-bottom:1px solid #e5edf6}
+footer{text-align:center;color:#8793a3;font-size:11px;margin-top:25px}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo">💰</div><h1>FREE TIME EARNING</h1><p>YOUR DIGITAL WORK PLATFORM</p></header>
+<main id="app"></main>
+<footer>FREE TIME EARNING · Demo version · পয়েন্ট বাস্তব টাকা নয়</footer>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const STORE='fte_demo_users_v1', SESSION='fte_demo_session_v1';
+const WA='https://wa.me/8801606871929';
+const tasks=[
+ ['বাটন ভিউ','👁️',20,'timer'],['ডিজিটাল আর্নিং','💻',20,'timer'],
+ ['লিংক শেয়ার','🔗',10,'links'],['লাইক করুন','👍',10,'simple'],
+ ['লিংক ভিউ','🌐',10,'linkview'],['পোস্ট দেখুন','📰',20,'post'],
+ ['কুইজ খেলুন','❓',10,'simple'],['টাইপিং করুন','⌨️',10,'simple'],
+ ['কপি পেষ্ট','📋',10,'simple'],['নতুন কাজ','✨',10,'simple'],
+ ['মাইক্রো জব','🧩',10,'simple'],['রেফারেন্স','🤝',10,'simple'],
+ ['ফলো করুন','➕',10,'simple'],['ভিডিও দেখুন','▶️',10,'simple'],
+ ['বোনাস নিন','🎁',10,'simple'],['সপ্তাহের বোনাস','📅',10,'simple'],
+ ['প্রতিদিন বোনাস','🌞',10,'simple'],['মাসিক আয়','📈',10,'simple'],
+ ['রিচার্জ','📱',10,'simple'],['মিল করন','🔀',10,'simple'],
+ ['প্রশ্নের উত্তর','💬',10,'simple'],['মেম্বার অ্যাড','👥',100,'member']
+];
+let currentTask=null,timerHandle=null,seconds=0;
+function users(){try{return JSON.parse(localStorage.getItem(STORE)||'[]')}catch(e){return []}}
+function saveUsers(a){localStorage.setItem(STORE,JSON.stringify(a))}
+function current(){let id=localStorage.getItem(SESSION);return users().find(u=>u.id===id)||null}
+function updateUser(fn){let a=users(),i=a.findIndex(u=>u.id===localStorage.getItem(SESSION));if(i<0)return;a[i]=fn(a[i]);saveUsers(a)}
+function money(p){return (p/100).toFixed(2)+'৳'}
+function go(html){$('#app').innerHTML=html}
+function back(){clearInterval(timerHandle);timerHandle=null;home()}
+function home(){
+ let u=current();
+ if(!u){go(`<div class="stack"><button onclick="signupPage()">📝 সাইনআপ করুন</button><button class="secondary" onclick="loginPage()">🔐 লগিন করুন</button></div>`);return}
+ go(`<h2>ওয়েলকাম টু ফ্রি টাইম আর্নিং প্লাটফর্ম</h2>
+ <div class="stack">
+ <button onclick="profilePage()">👤 আমার প্রোফাইল</button>
+ <button class="secondary" onclick="activatePage()">⚡ আইডি অ্যাক্টিভ করুন</button>
+ </div>
+ <div class="grid">${tasks.map((t,i)=>`<button class="task" onclick="openTask(${i})"><span>${t[1]}</span><span>${t[0]}</span></button>`).join('')}</div>
+ <button class="secondary" style="margin-top:12px" onclick="teamGate()">🛡️ টিম প্যানেল</button>
+ <button class="danger" style="margin-top:10px" onclick="logout()">লগআউট</button>
+ <div class="notice">ডেমো সংস্করণ: এখানে দেখানো পয়েন্ট পরীক্ষামূলক। বাস্তব উপার্জন বা পেমেন্টের নিশ্চয়তা নয়।</div>`);
+}
+function signupPage(){go(`<button class="back" onclick="home()">← ফিরে যান</button><h2>📝 সাইনআপ করুন</h2>
+<form id="signup"><label>নাম</label><input id="suName" required minlength="3" autocomplete="username" placeholder="আপনার নাম">
+<label>পাসওয়ার্ড</label><input id="suPass" required minlength="4" type="password" autocomplete="new-password" placeholder="পাসওয়ার্ড">
+<label>কনফার্ম পাসওয়ার্ড</label><input id="suConfirm" required type="password" placeholder="আবার পাসওয়ার্ড দিন">
+<button style="margin-top:17px">কনফার্ম হয়েছে</button></form><div id="msg"></div>`);
+$('#signup').onsubmit=e=>{e.preventDefault();let name=$('#suName').value.trim(),pass=$('#suPass').value,confirm=$('#suConfirm').value,a=users();
+if(pass!==confirm){$('#msg').innerHTML='<p class="notice">পাসওয়ার্ড দুটি মিলছে না।</p>';return}
+if(a.some(u=>u.name.toLowerCase()===name.toLowerCase())){$('#msg').innerHTML='<p class="notice">এই নামটি আগে ব্যবহার করা হয়েছে।</p>';return}
+if(a.some(u=>u.pass===pass)){$('#msg').innerHTML='<p class="notice">এই পাসওয়ার্ডটি আগে ব্যবহার করা হয়েছে। অন্য পাসওয়ার্ড দিন।</p>';return}
+a.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),name,pass,balance:0,active:false,created:Date.now()});saveUsers(a);
+$('#msg').innerHTML='<p class="successText">আপনার সাইনআপ সম্পূর্ণ হয়েছে🎁</p><button class="secondary" onclick="home()">ফিরে যান</button>';
+};}
+function loginPage(){go(`<button class="back" onclick="home()">← ফিরে যান</button><h2>🔐 লগিন করুন</h2>
+<form id="login"><label>নাম</label><input id="liName" required autocomplete="username"><label>পাসওয়ার্ড</label><input id="liPass" required type="password" autocomplete="current-password"><button style="margin-top:17px">লগিন করুন</button></form><div id="msg"></div>`);
+$('#login').onsubmit=e=>{e.preventDefault();let u=users().find(x=>x.name.toLowerCase()===$('#liName').value.trim().toLowerCase()&&x.pass===$('#liPass').value);if(!u){$('#msg').innerHTML='<p class="notice">নাম অথবা পাসওয়ার্ড সঠিক নয়।</p>';return}localStorage.setItem(SESSION,u.id);home()}}
+function logout(){localStorage.removeItem(SESSION);home()}
+function profilePage(){let u=current();if(!u)return home();go(`<button class="back" onclick="home()">← ফিরে যান</button><h2>👤 আমার প্রোফাইল</h2>
+<div class="card"><div class="profileline"><b>নাম:</b> ${escapeHtml(u.name)}</div><div class="profileline"><b>মোট ব্যালেন্স:</b><div class="balance">${money(u.balance)}</div></div><div class="profileline"><b>আইডি স্ট্যাটাস:</b> ${u.active?'Active':'Inactive'}</div></div>
+<button onclick="withdraw()">💳 টাকা তুলুন</button><button class="secondary" style="margin-top:10px" onclick="activatePage()">⚡ আইডি অ্যাক্টিভ করুন</button>
+<p class="note">এটি পরীক্ষামূলক পয়েন্ট ব্যালেন্স; বাস্তব টাকা নয়।</p>`)}
+function withdraw(){let u=current();if(u.balance<20000){alert('আপনার পর্যাপ্ত টাকা নাই। ২০০ টাকা হলে যোগাযোগ করতে পারবেন।');return}location.href=WA}
+function activatePage(){go(`<button class="back" onclick="home()">← ফিরে যান</button><h2>⚡ আইডি অ্যাক্টিভ করুন</h2>
+<div class="card">আপনি নিয়মিত এই কাজগুলো করতে চাইলে আপনার আইডি আগে অ্যাক্টিভ করতে হবে। না হলে আপনি কাজগুলো করতে পারবেন না।
+<ul><li>প্রতিদিন আনলিমিটেড কাজ করতে পারবেন।</li><li>২০০৳ হলেই টাকা তোলার আবেদন করতে পারবেন।</li></ul>
+<b>আমাদের কাজ:</b><ul>${['অংক করে ইনকাম','কুইজ খেলে ইনকাম','টাইপ করে ইনকাম','অ্যাড দেখে ইনকাম','লাইক করে ইনকাম','সাবস্ক্রাইব করে ইনকাম','ভিডিও দেখে ইনকাম','মেম্বার অ্যাড করে ইনকাম','মার্কেটিং করে ইনকাম','বাটন ভিউ ইনকাম','পোস্ট করে ইনকাম','ডিজিটাল আর্নিং','কমেন্ট করে ইনকাম','ফলো দিয়ে ইনকাম','জিমেইল সেল ইনকাম','রেফার করে ইনকাম','গেম খেলে ইনকাম','লিংক শেয়ার করে ইনকাম','লিংক ভিউ ইনকাম','বিজ্ঞাপন ইনকাম','ইত্যাদি'].map(x=>'<li>'+x+'</li>').join('')}</ul>
+এছাড়াও বিভিন্ন ধরনের ছোট ছোট কাজের তথ্য জানতে WhatsApp-এ যোগাযোগ করুন।</div>
+<button onclick="location.href=WA">আইডি অ্যাক্টিভ করুন</button>`)}
+function openTask(i){let u=current();if(!u)return loginPage();if(!u.active){alert('কাজগুলো করে ইনকাম করার জন্য আগে আইডি অ্যাক্টিভ করুন');return}
+currentTask=tasks[i];let [name,icon,reward,type]=currentTask;
+if(type==='timer'){seconds=60;go(`<button class="back" onclick="home()">← ফিরে যান</button><h2>${icon} ${name}</h2><div class="card" style="text-align:center"><p>ডেমো টাইমার</p><div class="balance" id="clock">01:00</div><p class="note">এক মিনিটের ডেমো কাজ সম্পন্ন করুন।</p></div><div id="timerMsg"></div>`);timerHandle=setInterval(()=>{seconds--;$('#clock').textContent='00:'+String(seconds).padStart(2,'0');if(seconds<=0){clearInterval(timerHandle);updateUser(x=>({...x,balance:x.balance+reward}));$('#timerMsg').innerHTML='<p class="successText">ডেমো কাজ শেষ। '+money(reward)+' পয়েন্ট যোগ হয়েছে। প্রোফাইলে নেওয়া হচ্ছে...</p>';setTimeout(profilePage,1200)}},1000);return}
+let body='';
+if(type==='links')body=`<p>নিচের লিংকগুলো খুলতে পারেন। বাইরের ওয়েবসাইটে যাওয়ার আগে ঠিকানা যাচাই করুন।</p><a class="link" target="_blank" rel="noopener" href="https://tinyurl.com/Limondigital">https://tinyurl.com/Limondigital</a><a class="link" target="_blank" rel="noopener" href="https://bka.sh/next?c=signup&uuid=C12VUQ9L1">https://bka.sh/next?c=signup&uuid=C12VUQ9L1</a>`;
+else if(type==='linkview')body=`<p>বাইরের লিংক:</p><a class="link" target="_blank" rel="noopener" href="https://bka.sh/next?c=signup&uuid=C12VUQ9L1">https://bka.sh/next?c=signup&uuid=C12VUQ9L1</a>`;
+else if(type==='post')body=`<div class="card">আসসালামু আলাইকুম!<br>আপনি কি ঘরে বসে ফ্রি সময় অনলাইনে কাজ করে ইনকাম করতে চান🤑<br>তাহলে আপনার জন্য আমরা নিয়ে এসেছি লাইভ গুড অ্যাপস। আরনিং এর সেরা সুযোগ 🎁<h3>আমাদের কাজগুলো:</h3><ul>${['এ্যাড দেখে ইনকাম','কুইজ খেলে ইনকাম','টাইপিং করে ইনকাম','মাইক্রো জব','জব পোস্ট করে ইনকাম','কোর্স করে ইনকাম','রেফার করে ইনকাম','লাইক কমেন্ট করে ইনকাম','রিচার্জ করে ইনকাম','মেম্বার এড করে ইনকাম','সাপ্তাহিক বোনাসের সুবিধা'].map(x=>'<li>'+x+'</li>').join('')}</ul>কাজ না জানলে শিখিয়ে দেওয়া হবে। কাজের বিস্তারিত জানতে কাউন্সিলরের সঙ্গে যোগাযোগ করুন।<br><a class="link" href="https://wa.me/01990556576">WhatsApp: 01990556576</a>❤️ thank you ❤️</div>`;
+else if(type==='member')body=`<div class="card"><h3>একটা মেম্বার অ্যাড করালে ১০০৳ করে পাবেন।</h3><p>বিস্তারিত জানতে মেসেজ করুন: মেম্বার অ্যাড সম্পর্কে জানতে চাই।</p><a class="link" href="${WA}">WhatsApp-এ যোগাযোগ করুন</a></div>`;
+else body=`<div style="text-align:center;font-size:54px;margin:22px">${icon}</div><p class="successText">ডেমো কাজের পেজে স্বাগতম।</p><p>এই কাজের জন্য প্রদর্শিত পুরস্কার: ${money(reward)} ডেমো পয়েন্ট।</p>`;
+go(`<button class="back" onclick="completeTask()">← ফিরে যান</button><h2>${icon} ${name}</h2>${body}<div class="notice">এখানে প্রদর্শিত পুরস্কার পরীক্ষামূলক ডেমো পয়েন্ট; বাস্তব অর্থ নয়।</div><button class="success" onclick="completeTask()">কাজ শেষ / ফিরে যান</button>`);
+}
+function completeTask(){if(currentTask){let reward=currentTask[2];updateUser(u=>({...u,balance:u.balance+reward}));currentTask=null;alert('ধন্যবাদ! '+money(reward)+' ডেমো পয়েন্ট যোগ হয়েছে।')}home()}
+function teamGate(){go(`<button class="back" onclick="home()">← ফিরে যান</button><h2>🛡️ টিম প্যানেল</h2><label>টিম পাসওয়ার্ড</label><input id="teamPass" type="password" placeholder="পাসওয়ার্ড"><button style="margin-top:12px" onclick="teamLogin()">প্রবেশ করুন</button><p class="note">ডেমো প্যানেল: পাসওয়ার্ড কোডে দৃশ্যমান; বাস্তব নিরাপত্তা নেই।</p>`)}
+function teamLogin(){if($('#teamPass').value!=='ttcm'){alert('পাসওয়ার্ড সঠিক নয়');return}teamPanel()}
+function teamPanel(){go(`<button class="back" onclick="home()">← ফিরে যান</button><h2>🛡️ টিম প্যানেল</h2><label>নাম</label><input id="searchName" placeholder="ব্যবহারকারীর নাম" oninput="renderUsers()"><label>পাসওয়ার্ড</label><input id="searchUserPass" type="password" placeholder="ব্যবহারকারীর পাসওয়ার্ড" oninput="renderUsers()"><div id="userResults"></div>`);renderUsers()}
+function renderUsers(){let q=($('#searchName')?.value||'').toLowerCase(),p=$('#searchUserPass')?.value||'';let a=users().filter(u=>u.name.toLowerCase().includes(q)&&(!p||u.pass===p));$('#userResults').innerHTML=a.map(u=>`<div class="card"><b>${escapeHtml(u.name)}</b><p>স্ট্যাটাস: ${u.active?'Active':'Inactive'} · ব্যালেন্স: ${money(u.balance)}</p><button class="${u.active?'danger':'success'}" onclick="toggleActive('${u.id}')">${u.active?'Deactivate':'Activate'}</button></div>`).join('')||'<p class="note">কোনো অ্যাকাউন্ট পাওয়া যায়নি।</p>'}
+function toggleActive(id){let a=users();a=a.map(u=>u.id===id?{...u,active:!u.active}:u);saveUsers(a);renderUsers()}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+home();
+</script>
+</body>
+</html>
